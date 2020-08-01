@@ -44,6 +44,16 @@ body, html {
   opacity: 0.7;
 }
 
-.w3-col:m3 {
-	margin-right: 0px;
+.longtext {
+	margin-left: 25%;
+	width: 50%;
+}
+
+.comparisonimage {
+	max-width: 500px;
+}
+
+.tablecontent {
+	text-align: center;
+	font-weight: bold;
 }
