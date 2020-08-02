@@ -30,13 +30,51 @@
 <div class="w3-center" id="about" style="margin-top: 5%">
    <iframe width="1120" height="630" src="https://www.youtube.com/embed/clQTK2nIQUI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
    </iframe>
-  <h3 class="w3-center">The Engine</h3>
-  <p>KGBEngine is...
-  <div class="w3-row">
-    <!-- Hide this text on small devices -->
-      <p>Bla bla bla </p></p>
+  <div class="longtext">
+    <h3 class="w3-center">The Engine</h3>
+    <p align="justify">KGBEngine is a custom rendering engine made by me and Pablo Bengoa Nagy at ESAT Valencia for our HND in Computing and Systems Development</p>
+      <p align="justify">Main features:</p>
+      <p align="justify" style="font-weight: bold">-Task System and Draw queues</p>
+      <p align="justify">The renderer is prepared to work using multiple threads, this is why the object drawing is done in two steps, first a draw queue is created with all the necessary information for the next frame and then it is rendered by the engine. This is completed by using a task system to launch other threads for non rendering processing.</p>
+      <p align="justify" style="font-weight: bold">-Multithreading</p>
+      <p align="justify">The engine uses the main thread for rendering and sends tasks to multiple threads for logic calculation, input and ImGui. The graphics backend is internal and the logic thread is the one that prepares the draw commands that will be then processed by the main core.
+      The frame update follows 3 steps:
+      Render begin: Executes some systems and saves the last frame’s draw commands
+      Task running: The logic and editor tasks are launched so they can process the next frame.
+      Render end: Just after starting the previous processes the render pass is done.</p>
+      <p align="justify" style="font-weight: bold">-Node hierarchy</p>
+      <p align="justify">Every entity in the engine can have a parent and ‘n’ number of children, which are stored as pointers. Regarding transformations, we decided that using a dirty boolean worked faster after doing some time measuring.
+      This way, once a node’s transform is updated, all of their children are also updated.</p>
+      <p align="justify" style="font-weight: bold">-Component oriented Nodes</p>
+      <p align="justify">Nodes are nothing by themselves, in order to make the code more simple, generic and modular, we thought that component based nodes were the best option. This components are stored in an scoped array of px::mem, but in order to add, remove or return reference to this components faster, we also store values in a uint64 using masks and an constant id the components have, this way the access is much faster and reliable. 
+      We also used C++ templates to make the code much shorter and maintainable.
+      In order to use these components, we created systems around them, that carry out the job that the components are destined to.
+      The engine’s user would be able to create new components and systems to use them as long as the follow, the structure already set.</p>
+      <p align="justify" style="font-weight: bold">-Framebuffers</p>
+      <p align="justify">The user is able to create framebuffers with a defined set of color and depth textures in order to do multiple render passes. A render system or a display list can have an associated framebuffer. If that is so then those commands won’t be displayed on the screen. If no framebuffer is set then the engine assumes that the display list will be rendered on screen.
+      Depending on the requested configuration the different textures of the framebuffer can be set on any material that supports them. It is recommended to submit the display lists that use framebuffers before the ones using the textures to prevent any bugs.
+      Internally the framebuffer is completely wrapped so any backend could be used without changing the logic code.</p>
+      <p align="justify" style="font-weight: bold">-Post Processing</p>
+      <p align="justify">In order to manage post processing, we decided to work with two framebuffers, so we could apply any post process, and then continue with the next one using the last’s texture. By using this kind of “ping-pong” framebuffers we could make it really simple. We had to make special cases, for Bloom for example, since it needs to be blurred more than once. After all the active post processes are done, we finally draw the final texture to a quad on screen.</p>
+      <p align="justify" style="font-weight: bold">-Illumination and Shadows</p>
+      <p align="justify">Dynamic illumination is supported in the engine. This includes the ability to create one directional light, up to 12 spotlights and up to 6 spotlights with shadow casting. These amounts can be changed relatively easily by modifying some constants of the engine. 
+      The lights are implemented in the Entity Component System. Many parameters can be configured such as color, intensity, attenuation and cone angles. If an entity with a light component also has a camera component it will turn into a shadow casting light. The light system creates all of the render passes for the shadow mapping so it should be called before the scene rendering.</p>
+      <p align="justify" style="font-weight: bold">-Lua Scripting</p>
+      <p align="justify">LUA scripting is implemented in the entity component system and can affect a node’s transform, material and geometry. Also there are two overridden functions (Start and Update) that are called from the engine to allow for more complex logic.
+      In lua also the current time and the frame delta time can be accessed from the script.
+      The script can be loaded dynamically using the editor or with a function of the component. The Start function is called once at the beginning and the Update is called every frame.</p>
+      <p align="justify" style="font-weight: bold">-Audio</p>
+      <p align="justify">I implemented a simple audio system using SoLoud as a backend. The audio system works with two components (Audio Source & Audio Listener) and one system.
+      The audio listener basically just works as a tag to tell the system that it’s actually something it can work with, since it doesn’t store any data other than it’s id.
+      The audio source, on the other hand, stores all the data of a clip of music or sound that can be played.
+      In order to work, both the Audio Source and the Audio Listener must be in a node with a Transform component as well, since the audio spatialization is unable to determine positions and rotations otherwise.</p>
+      <p align="justify" style="font-weight: bold">-Editor</p>
+      <p align="justify">In order to make testing and debugging faster and simpler, I decided to make a good engine editor using the ImGui library.
+      It started as something that allowed us to move nodes and modify components at runtime without much trouble, but it got bigger with time, to the point of having things like a log display, a command console and some other stuff.
+      The editor currently provides a fast way of modifying component attribute, creating nodes, adding/removing components, attaching/detaching nodes to/from other nodes and more.</p>
   </div>
 </div>
+<br><br>
 
 <!-- Footer -->
 <footer class="w3-center w3-black w3-padding-64 w3-hover-opacity-off">
