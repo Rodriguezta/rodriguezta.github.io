@@ -53,9 +53,9 @@
       <p align="justify" style="font-weight: bold">-Multithreading</p>
       <p align="justify">The engine uses the main thread for rendering and sends tasks to multiple threads for logic calculation, input and ImGui. The graphics backend is internal and the logic thread is the one that prepares the draw commands that will be then processed by the main core.
       The frame update follows 3 steps:
-      Render begin: Executes some systems and saves the last frame’s draw commands
-      Task running: The logic and editor tasks are launched so they can process the next frame.
-      Render end: Just after starting the previous processes the render pass is done.</p>
+      <p align="justify">Render begin: Executes some systems and saves the last frame’s draw commands</p>
+      <p align="justify">Task running: The logic and editor tasks are launched so they can process the next frame.</p>
+      <p align="justify">Render end: Just after starting the previous processes the render pass is done.</p></p>
       <p align="justify" style="font-weight: bold">-Node hierarchy</p>
       <p align="justify">Every entity in the engine can have a parent and ‘n’ number of children, which are stored as pointers. Regarding transformations, we decided that using a dirty boolean worked faster after doing some time measuring.
       This way, once a node’s transform is updated, all of their children are also updated.</p>
