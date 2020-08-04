@@ -36,17 +36,17 @@
 <!-- First Parallax Image with Logo Text -->
 <div class="bgimg-1 w3-display-container w3-opacity-min" id="home">
   <div class="w3-display-middle" style="white-space:nowrap;">
-    <span class="w3-center w3-padding-large w3-black w3-xlarge w3-wide w3-animate-opacity">Kevin <span class="w3-hide-small">Rodriguez /</span> Game Developer</span>
+    <span class="w3-center w3-padding-large w3-black w3-xlarge w3-wide w3-animate-opacity">KGB Engine</span>
   </div>
 </div>
 
 <!-- Container (About Section) -->
 <div class="w3-center" id="about" style="margin-top: 5%">
-   <iframe width="1120" height="630" src="https://www.youtube.com/embed/clQTK2nIQUI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+   <iframe width="1120" height="630" src="https://www.youtube.com/embed/MsOC8ntXVqM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
    </iframe>
   <div class="longtext">
     <h3 class="w3-center">The Engine</h3>
-    <p align="justify">KGBEngine is a custom rendering engine made by me and Pablo Bengoa Nagy at ESAT Valencia for our HND in Computing and Systems Development</p>
+    <p align="justify">KGBEngine is a custom rendering engine made by me and Pablo Bengoa Nagy at ESAT Valencia for our HND in Computing and Systems Development.</p>
       <p align="justify">Main features:</p>
       <p align="justify" style="font-weight: bold">-Task System and Draw queues</p>
       <p align="justify">The renderer is prepared to work using multiple threads, this is why the object drawing is done in two steps, first a draw queue is created with all the necessary information for the next frame and then it is rendered by the engine. This is completed by using a task system to launch other threads for non rendering processing.</p>
@@ -60,32 +60,65 @@
       <p align="justify">Every entity in the engine can have a parent and ‘n’ number of children, which are stored as pointers. Regarding transformations, we decided that using a dirty boolean worked faster after doing some time measuring.
       This way, once a node’s transform is updated, all of their children are also updated.</p>
       <p align="justify" style="font-weight: bold">-Component oriented Nodes</p>
-      <p align="justify">Nodes are nothing by themselves, in order to make the code more simple, generic and modular, we thought that component based nodes were the best option. This components are stored in an scoped array of px::mem, but in order to add, remove or return reference to this components faster, we also store values in a uint64 using masks and an constant id the components have, this way the access is much faster and reliable. 
+      <p align="justify">Nodes are nothing by themselves, in order to make the code more simple, generic and modular, we thought that component based nodes were the best option. This components are stored in an array, but in order to add, remove or return reference to this components faster, we also store values in a uint64 using masks and a constant id the components have, this way the access is much faster and reliable. 
       We also used C++ templates to make the code much shorter and maintainable.
       In order to use these components, we created systems around them, that carry out the job that the components are destined to.
-      The engine’s user would be able to create new components and systems to use them as long as the follow, the structure already set.</p>
+      The engine’s user would be able to create new components and systems to use them as long as he follows the structure already set.</p>
+      <img src="https://i.imgur.com/vO7iIae.png" alt="Component Example">
+      <p align="center" style="font-style: italic">Component system example code</p>
+      <p align="justify">The example above shows the way to create a node, adding and removing components. Note that skybox is a Node* and that all nodes have a transform component by default.</p>
       <p align="justify" style="font-weight: bold">-Framebuffers</p>
       <p align="justify">The user is able to create framebuffers with a defined set of color and depth textures in order to do multiple render passes. A render system or a display list can have an associated framebuffer. If that is so then those commands won’t be displayed on the screen. If no framebuffer is set then the engine assumes that the display list will be rendered on screen.
       Depending on the requested configuration the different textures of the framebuffer can be set on any material that supports them. It is recommended to submit the display lists that use framebuffers before the ones using the textures to prevent any bugs.
       Internally the framebuffer is completely wrapped so any backend could be used without changing the logic code.</p>
       <p align="justify" style="font-weight: bold">-Post Processing</p>
       <p align="justify">In order to manage post processing, we decided to work with two framebuffers, so we could apply any post process, and then continue with the next one using the last’s texture. By using this kind of “ping-pong” framebuffers we could make it really simple. We had to make special cases, for Bloom for example, since it needs to be blurred more than once. After all the active post processes are done, we finally draw the final texture to a quad on screen.</p>
+      <table>
+      <tr>
+        <td><img src="https://i.imgur.com/xNUSS7E.png" alt="No Post processes" class="comparisonimage"></td>
+        <td><img src="https://i.imgur.com/i95CddN.png" alt="Post processes active" class="comparisonimage"></td>
+      </tr>
+      <tr>
+        <td><p align="center" style="font-style: italic"> Scene without post processing</p></td>
+        <td><p align="center" style="font-style: italic"> Scene with grain and vignette</p></td>
+      </tr>
+    </table>
       <p align="justify" style="font-weight: bold">-Illumination and Shadows</p>
-      <p align="justify">Dynamic illumination is supported in the engine. This includes the ability to create one directional light, up to 12 spotlights and up to 6 spotlights with shadow casting. These amounts can be changed relatively easily by modifying some constants of the engine. 
+      <p align="justify">Dynamic illumination is supported in the engine. This includes the ability to create one directional light up to 12 spotlights 6 of which can have shadow casting. These amounts can be changed relatively easily by modifying some constants of the engine. 
       The lights are implemented in the Entity Component System. Many parameters can be configured such as color, intensity, attenuation and cone angles. If an entity with a light component also has a camera component it will turn into a shadow casting light. The light system creates all of the render passes for the shadow mapping so it should be called before the scene rendering.</p>
+      <img src="https://i.imgur.com/T34LaK6.png" alt="Shadow Mapping">
+      <p align="center" style="font-style: italic">Shadow mapping example with 4 light sources</p>
       <p align="justify" style="font-weight: bold">-Lua Scripting</p>
       <p align="justify">LUA scripting is implemented in the entity component system and can affect a node’s transform, material and geometry. Also there are two overridden functions (Start and Update) that are called from the engine to allow for more complex logic.
       In lua also the current time and the frame delta time can be accessed from the script.
       The script can be loaded dynamically using the editor or with a function of the component. The Start function is called once at the beginning and the Update is called every frame.</p>
       <p align="justify" style="font-weight: bold">-Audio</p>
-      <p align="justify">I implemented a simple audio system using SoLoud as a backend. The audio system works with two components (Audio Source & Audio Listener) and one system.
+      <p align="justify">KGB Engine provides a simple audio system using SoLoud as a backend. The audio system works with two components (Audio Source & Audio Listener) and one system.
       The audio listener basically just works as a tag to tell the system that it’s actually something it can work with, since it doesn’t store any data other than it’s id.
       The audio source, on the other hand, stores all the data of a clip of music or sound that can be played.
       In order to work, both the Audio Source and the Audio Listener must be in a node with a Transform component as well, since the audio spatialization is unable to determine positions and rotations otherwise.</p>
       <p align="justify" style="font-weight: bold">-Editor</p>
-      <p align="justify">In order to make testing and debugging faster and simpler, I decided to make a good engine editor using the ImGui library.
+      <p align="justify">In order to make testing and debugging faster and simpler, the engine uses the ImGui library.
       It started as something that allowed us to move nodes and modify components at runtime without much trouble, but it got bigger with time, to the point of having things like a log display, a command console and some other stuff.
       The editor currently provides a fast way of modifying component attribute, creating nodes, adding/removing components, attaching/detaching nodes to/from other nodes and more.</p>
+      <img src="https://i.imgur.com/FSH0kIl.png" alt="Editor">
+      <p align="center" style="font-style: italic">Editor overview</p>
+      <p align="justify" style="font-weight: bold">-Normal Mapping</p>
+      <p align="justify">To improve the lighting quality a normal mapping feature was added. Normal mapping is a technique in which a textures pixels are used as normals, converting the rgb from the pixels to xyz coordinates. This allows an object with very few polygons to appear as having a much higher vertex count.
+      The only issue is that in the texture all of the normals are pointed in the z positive axis, this is why the normals have to be transformed to the vertex tangent space.
+      This applies a rotation to the texture’s normals so that they point outwards relative to the surface’s actual normal vector.</p>
+      <table>
+        <tr>
+          <td><img src="https://i.imgur.com/v4gmrBP.png" alt="No Normal Mapping" class="comparisonimage"></td>
+          <td><img src="https://i.imgur.com/uYUDL4Q.png" alt="Normal Mapping" class="comparisonimage"></td>
+        </tr>
+        <tr>
+          <td><p align="center" style="font-style: italic"> Geometry without normal mapping</p></td>
+          <td><p align="center" style="font-style: italic"> Geometry with normal mapping</p></td>
+        </tr>
+      </table>
+      <p align="justify" style="font-weight: bold">-Vulkan Backend</p>
+      <p align="justify">As an extra feature the possibility to change the rendering backend was implemented in Vulkan. Some of the features of the engine are not implemented with the Vulkan backend due to a lack of time.</p>
   </div>
 </div>
 <br><br>
@@ -96,12 +129,24 @@
   <div class="w3-xlarge w3-section">
     <a href="https://github.com/Rodriguezta"><i class="fa fa-github"></i></a>
     <a href="https://www.linkedin.com/in/kevin-rodriguez-tabares-b066441b3/"><i class="fa fa-linkedin"></i></a>
+    <a href="https://www.youtube.com/channel/UCPn_iVbhWaT0IfiZC0LKaNw"><i class="fa fa-youtube"></i></a>
     <a href="mailto:krtabaresdev@gmail.com"><i class="fa fa-envelope"></i></a>
   </div>
   <p><i class="fa fa-copyright"></i> COPYRIGHT 2020 KEVIN RODRÍGUEZ</p>
 </footer>
  
 <script>
+
+  // Change style of navbar on scroll
+window.onscroll = function() {myFunction()};
+function myFunction() {
+    var navbar = document.getElementById("myNavbar");
+    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        navbar.className = "w3-bar" + " w3-card" + " w3-animate-top" + " w3-white";
+    } else {
+        navbar.className = navbar.className.replace(" w3-card w3-animate-top w3-white", "");
+    }
+}
 
 // Used to toggle the menu on small screens when clicking on the menu button
 function toggleFunction() {

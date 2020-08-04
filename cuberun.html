@@ -37,7 +37,7 @@
 <!-- First Parallax Image with Logo Text -->
 <div class="bgimg-1 w3-display-container w3-opacity-min" id="home">
   <div class="w3-display-middle" style="white-space:nowrap;">
-    <span class="w3-center w3-padding-large w3-black w3-xlarge w3-wide w3-animate-opacity">Kevin <span class="w3-hide-small">Rodriguez /</span> Game Developer</span>
+    <span class="w3-center w3-padding-large w3-black w3-xlarge w3-wide w3-animate-opacity">Cube Run</span>
   </div>
 </div>
 
@@ -66,12 +66,24 @@
   <div class="w3-xlarge w3-section">
     <a href="https://github.com/Rodriguezta"><i class="fa fa-github"></i></a>
     <a href="https://www.linkedin.com/in/kevin-rodriguez-tabares-b066441b3/"><i class="fa fa-linkedin"></i></a>
+    <a href="https://www.youtube.com/channel/UCPn_iVbhWaT0IfiZC0LKaNw"><i class="fa fa-youtube"></i></a>
     <a href="mailto:krtabaresdev@gmail.com"><i class="fa fa-envelope"></i></a>
   </div>
   <p><i class="fa fa-copyright"></i> COPYRIGHT 2020 KEVIN RODRÍGUEZ</p>
 </footer>
  
 <script>
+
+  // Change style of navbar on scroll
+window.onscroll = function() {myFunction()};
+function myFunction() {
+    var navbar = document.getElementById("myNavbar");
+    if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        navbar.className = "w3-bar" + " w3-card" + " w3-animate-top" + " w3-white";
+    } else {
+        navbar.className = navbar.className.replace(" w3-card w3-animate-top w3-white", "");
+    }
+}
 
 // Used to toggle the menu on small screens when clicking on the menu button
 function toggleFunction() {
