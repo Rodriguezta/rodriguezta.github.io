@@ -28,8 +28,8 @@ body, html {
 
 /* Third image (Contact) */
 .bgimg-3 {
-  background-image: url("https://i.imgur.com/SGb6kbK.jpg");
-  min-height: 400px;
+	background-image: url("https://i.imgur.com/3MOCOtI.png");
+	min-height: 400px;
 }
 
 /* Turn off parallax scrolling for tablets and phones */
